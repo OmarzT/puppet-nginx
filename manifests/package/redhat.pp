@@ -63,7 +63,7 @@ class nginx::package::redhat (
           sslcacert    => '/etc/ssl/nginx/CA.crt',
           sslclientcert => '/etc/ssl/nginx/nginx-repo.crt',
           sslclientkey => '/etc/ssl/nginx/nginx-repo.key',
-          before       => Package['nginx'],
+          before       => Package['nginx-plus'],
         }
       }
       default: {
