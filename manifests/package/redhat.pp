@@ -57,7 +57,7 @@ class nginx::package::redhat (
         yumrepo { 'nginx-plus':
           baseurl  => "https://plus-pkgs.nginx.com/${_os}/${::operatingsystemmajrelease}/\$basearch/",
           descr    => 'nginx-plus repo',
-          enabled  => '1',cd
+          enabled  => '1',
           gpgcheck => '0',
           priority => '1',
           sslcacert    => '/etc/ssl/nginx/CA.crt',
