@@ -97,7 +97,7 @@ class nginx::package::debian(
           content  => 'Acquire::https::plus-pkgs.nginx.com::SslKey "/etc/ssl/nginx/nginx-repo.key";',
           before => Apt::Source['nginx-plus'],
         }
-        package { ['apt-transport-https', 'ca-certificates', 'libgnutls26', 'libcurl3-gnutls']:
+        package { ['apt-transport-https', 'ca-certificates', 'libcurl3-gnutls']:
           ensure => 'present',
           before => Apt::Source['nginx-plus'],
         }
