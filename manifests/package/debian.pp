@@ -71,7 +71,6 @@ class nginx::package::debian(
         apt::source { 'nginx-plus':
           location => 'https://plus-pkgs.nginx.com/${distro}',
           repos    => 'nginx-plus',
-          options => 'http-proxy="http://proxyuser:proxypass@example.org:3128"',
         }
         apt::conf { 'verifypeer':
           priority => 99,
