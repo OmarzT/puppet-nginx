@@ -60,7 +60,6 @@ class nginx::package::redhat (
           enabled  => '1',
           gpgcheck => '0',
           priority => '1',
-          sslcacert    => '/etc/ssl/nginx/CA.crt',
           sslclientcert => '/etc/ssl/nginx/nginx-repo.crt',
           sslclientkey => '/etc/ssl/nginx/nginx-repo.key',
           before       => Package['nginx'],
