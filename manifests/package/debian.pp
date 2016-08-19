@@ -66,6 +66,41 @@ class nginx::package::debian(
           warning('You must set $package_name to "nginx-extras" to enable Passenger')
         }
       }
+      'nginx-plus': {
+        apt::source { 'nginx-plus':
+          location => 'https://plus-pkgs.nginx.com/${distro}',
+          repos    => 'nginx-plus',
+        }
+        apt::conf { 'verifypeer':
+          priority => 99,
+          content  => 'Acquire::https::plus-pkgs.nginx.com::Verify- "true";',
+          before => Apt::Source['nginx-plus'],
+        }
+        apt::conf { 'verifyhost':
+          priority => 99,
+          content  => 'Acquire::https::plus-pkgs.nginx.com::Verify- "true";',
+          before => Apt::Source['nginx-plus'],
+        }
+        apt::conf { 'cainfo':
+          priority => 99,
+          content  => 'Acquire::https::plus-pkgs.nginx.com::CaInfo "/etc/ssl/nginx/CA.crt";',
+          before => Apt::Source['nginx-plus'],
+        }
+        apt::conf { 'sslcert':
+          priority => 99,
+          content  => 'Acquire::https::plus-pkgs.nginx.com::SslCert  "/etc/ssl/nginx/nginx-repo.crt";',
+          before => Apt::Source['nginx-plus'],
+        }
+        apt::conf { 'sslkey':
+          priority => 99,
+          content  => 'Acquire::https::plus-pkgs.nginx.com::SslKey "/etc/ssl/nginx/nginx-repo.key";',
+          before => Apt::Source['nginx-plus'],
+        }
+        package { ['apt-transport-https', 'ca-certificates', 'libcurl3-gnutls']:
+          ensure => 'present',
+          before => Apt::Source['nginx-plus'],
+        }
+      }
       default: {
         fail("\$package_source must be 'nginx-stable', 'nginx-mainline' or 'passenger'. It was set to '${package_source}'")
       }
