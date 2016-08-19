@@ -79,6 +79,10 @@
 #     OCSP responses by the server. Defaults to false.
 #   [*ssl_session_timeout*] - String: Specifies a time during which a client
 #     may reuse the session parameters stored in a cache. Defaults to 5m.
+#   [*ssl_session_tickets*] - String: Enables or disables session resumption
+#     through TLS session tickets.
+#   [*ssl_session_ticket_key*] - String: Sets a file with the secret key used
+#     to encrypt and decrypt TLS session tickets.
 #   [*ssl_trusted_cert*]    - String: Specifies a file with trusted CA
 #     certificates in the PEM format used to verify client certificates and
 #     OCSP responses if ssl_stapling is enabled.
@@ -206,6 +210,8 @@ define nginx::resource::vhost (
   $ssl_stapling_responder       = undef,
   $ssl_stapling_verify          = false,
   $ssl_session_timeout          = '5m',
+  $ssl_session_tickets          = undef,
+  $ssl_session_ticket_key       = undef,
   $ssl_trusted_cert             = undef,
   $spdy                         = $::nginx::config::spdy,
   $http2                        = $::nginx::config::http2,
@@ -214,6 +220,7 @@ define nginx::resource::vhost (
   $proxy_read_timeout           = $::nginx::config::proxy_read_timeout,
   $proxy_connect_timeout        = $::nginx::config::proxy_connect_timeout,
   $proxy_set_header             = $::nginx::config::proxy_set_header,
+  $proxy_hide_header            = $::nginx::config::proxy_hide_header,
   $proxy_cache                  = false,
   $proxy_cache_key              = undef,
   $proxy_cache_use_stale        = undef,
@@ -355,6 +362,12 @@ define nginx::resource::vhost (
   }
   validate_bool($ssl_stapling_verify)
   validate_string($ssl_session_timeout)
+  if ($ssl_session_tickets) {
+    validate_string($ssl_session_tickets)
+  }
+  if ($ssl_session_ticket_key) {
+    validate_string($ssl_session_ticket_key)
+  }
   if ($ssl_trusted_cert != undef) {
     validate_string($ssl_trusted_cert)
   }
@@ -367,6 +380,7 @@ define nginx::resource::vhost (
     validate_string($proxy_redirect)
   }
   validate_array($proxy_set_header)
+  validate_array($proxy_hide_header)
   if ($proxy_cache != false) {
     validate_string($proxy_cache)
   }
@@ -592,6 +606,7 @@ define nginx::resource::vhost (
       proxy_cache_valid           => $proxy_cache_valid,
       proxy_method                => $proxy_method,
       proxy_set_header            => $proxy_set_header,
+      proxy_hide_header           => $proxy_hide_header,
       proxy_set_body              => $proxy_set_body,
       fastcgi                     => $fastcgi,
       fastcgi_params              => $fastcgi_params,
