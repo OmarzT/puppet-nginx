@@ -58,6 +58,7 @@ class nginx::package::redhat (
           gpgkey   => 'http://nginx.org/keys/nginx_signing.key',
           before   => Package['nginx'],
         }
+       }
 
       'nginx-plus': {
         yumrepo { 'nginx-plus':
