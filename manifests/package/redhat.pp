@@ -59,6 +59,19 @@ class nginx::package::redhat (
           before   => Package['nginx'],
         }
 
+      'nginx-plus': {
+        yumrepo { 'nginx-plus':
+          baseurl  => "https://plus-pkgs.nginx.com/${_os}/${::operatingsystemmajrelease}/\$basearch/",
+          descr    => 'nginx-plus repo',
+          enabled  => '1',
+          gpgcheck => '0',
+          priority => '1',
+          sslclientcert => '/etc/ssl/nginx/nginx-repo.crt',
+          sslclientkey => '/etc/ssl/nginx/nginx-repo.key',
+          before       => Package['nginx'],
+        }
+      }
+
         yumrepo { 'passenger':
           ensure => absent,
           before => Package['nginx'],
